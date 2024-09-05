@@ -5,7 +5,7 @@ import utils  # contains all the calculation functions
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # For flashing messages
-app.config['UPLOAD_FOLDER'] = './uploads'  # Folder to store uploaded files
+app.config['UPLOAD_FOLDER'] = '/tmp'  # Folder to store uploaded files
 
 # Ensure the upload folder exists
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
@@ -33,7 +33,7 @@ def index():
 
         # Check if the file is a CSV
         if file and file.filename.endswith('.csv'):
-            # Save the file to the upload folder
+            # Save the file to the tmp folder
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(file_path)
 
