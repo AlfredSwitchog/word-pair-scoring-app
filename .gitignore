@@ -1,2 +1,3 @@
 #ignore jupyter notebook used for testing scoring fucntions
-SNORE_scoring.ipynb
+/SNORE_scoring.ipynb
+/requirements_all.txt

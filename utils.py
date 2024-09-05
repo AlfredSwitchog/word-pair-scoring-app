@@ -1,9 +1,6 @@
-import os
 import pandas as pd
-from fuzzywuzzy import fuzz
 from pyxdameraulevenshtein import damerau_levenshtein_distance
 import regex as re
-import sys
 
 
 def string_cleaning(string):
@@ -52,10 +49,6 @@ def clean_df(df):
 
     # make every letter lowercase in the solution string
     df_short["Word2"] = df_short["Word2"].str.lower()
-
-    # calculate distance based on Leveinstein algorithm
-    #df_short["distance_leveinshtein"] = df_short.apply(
-     #   lambda row: fuzz.token_sort_ratio(row["Word2"], row["Response.text"]), axis=1)
 
     # calculate distance based on Damerau Levenshtein Distance
     df_short["distance_damerau"] = df_short.apply(
