@@ -1,20 +1,15 @@
-import utils
+from flask import Flask, render_template, request, flash, redirect
 import pandas as pd
-from flask import Flask, request, render_template
+import os
+import utils  # contains all the calculation functions
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your_secret_key'  # For flashing messages
+app.config['UPLOAD_FOLDER'] = './uploads'  # Folder to store uploaded files
 
-# A simple scoring function that reads a CSV and calculates a score
-def calculate_score(file_path):
-    try:
-        # Read the CSV file using pandas
-        df = pd.read_csv(file_path)
-
-        score = utils.clean_df(df)[0]
-
-        return score
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
+# Ensure the upload folder exists
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -24,26 +19,45 @@ def index():
     error = None
 
     if request.method == "POST":
-        # Get the file path from the form
-        file_path = request.form.get("file_path")
+        # Check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
 
-        # Call the calculate_score function with the provided file path
-        score = calculate_score(file_path)
+        file = request.files['file']
 
-        #call the cleaned_df function to calculate the results and return as dataframe
-        df_cleaned = utils.clean_df_return(file_path)
+        # Check if a file was selected
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
 
-        if isinstance(df_cleaned, pd.DataFrame):
-            # Convert the DataFrame to HTML if it's valid
-            df_html = df_cleaned.to_html(classes='table table-bordered', index=False)
+        # Check if the file is a CSV
+        if file and file.filename.endswith('.csv'):
+            # Save the file to the upload folder
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(file_path)
+
+            # Call the calculate_score function with the saved file path
+            score = utils.calculate_score(file_path)
+
+            # Call the clean_df_return function to process the file and return a cleaned DataFrame
+            df_cleaned = utils.clean_df_return(file_path)
+
+            if isinstance(df_cleaned, pd.DataFrame):
+                # Convert the DataFrame to HTML if it's valid
+                df_html = df_cleaned.to_html(classes='table table-bordered table-hover', index=False)
+            else:
+                # If result is an error message (string), assign it to error
+                error = df_cleaned
+
+            # Optionally delete the file after processing
+            os.remove(file_path)
         else:
-            # If result is an error message (string), assign it to error
-            error = df_cleaned
+            flash('Allowed file type is CSV')
 
-    # Render the index.html file and pass the score and the DataFrame HTML to it
+    # Render the index.html template and pass the score, df_html, and error to it
     return render_template('index.html', score=score, df_html=df_html, error=error)
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-

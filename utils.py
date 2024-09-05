@@ -2,7 +2,6 @@ import pandas as pd
 from pyxdameraulevenshtein import damerau_levenshtein_distance
 import regex as re
 
-
 def string_cleaning(string):
     clean_string = re.sub(r"\n", "", string)
     clean_string = re.sub(r"nan", "", clean_string)
@@ -23,7 +22,6 @@ def score_response_damerau(response, length_group):
         return 0
     else:
         return "error"
-
 
 def score_response_leveinshtein(response):
     if response > 90:
@@ -57,6 +55,18 @@ def clean_df(df):
     result_damerau = df_short["scoring_damerau"].sum()
     result_damerau = int(result_damerau)
     return result_damerau, df_short
+
+# A simple scoring function that reads a CSV and calculates a score
+def calculate_score(file_path):
+    try:
+        # Read the CSV file using pandas
+        df = pd.read_csv(file_path)
+
+        score = clean_df(df)[0]
+
+        return score
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
 
 def clean_df_return(path):
     try:
