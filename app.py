@@ -2,12 +2,6 @@ import utils
 import pandas as pd
 from flask import Flask, request, render_template
 
-"""path = "/Users/Richard/PycharmProjects/NeuroLab_3.10/PsychoPy/scoring/Memory/immediate recall/Nature/SI96LL110624_SNORE_recall_in_person_2024-06-11_20h52.57.436.csv"
-df = pd.read_csv(path)
-
-print(f"Result leveinshtein: {utils.clean_df(df)}")"""
-
-
 app = Flask(__name__)
 
 # A simple scoring function that reads a CSV and calculates a score
