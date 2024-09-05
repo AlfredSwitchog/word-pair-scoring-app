@@ -31,9 +31,6 @@ def score_response_leveinshtein(response):
     else:
         return 0
 
-path = "/Users/Richard/PycharmProjects/NeuroLab_3.10/PsychoPy/scoring/Memory/immediate recall/Nature/SI96LL110624_SNORE_recall_in_person_2024-06-11_20h52.57.436.csv"
-df = pd.read_csv(path)
-
 def clean_df(df):
 
     # Create a copy of the DataFrame slice
@@ -60,8 +57,6 @@ def clean_df(df):
     result_damerau = df_short["scoring_damerau"].sum()
     result_damerau = int(result_damerau)
     return result_damerau, df_short
-
-clean_df(df)[0]
 
 def clean_df_return(path):
     try:

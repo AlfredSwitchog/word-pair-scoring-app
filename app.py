@@ -22,7 +22,6 @@ def calculate_score(file_path):
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
-#TODO: Create a function here that retruns only the cleaned dataframe
 
 @app.route("/", methods=["GET", "POST"])
 def index():
