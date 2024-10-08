@@ -1,3 +1,5 @@
 #ignore jupyter notebook used for testing scoring fucntions
 /SNORE_scoring.ipynb
 /requirements_all.txt
+/testing.py
+/test_data/

@@ -31,7 +31,7 @@
         </form>
 
         <!-- Display the score -->
-        {% if score %}
+        {% if score is not none %}
             <h2 class="mt-4">Score: <span class="badge badge-success">{{ score }}</span></h2>
         {% endif %}
 
